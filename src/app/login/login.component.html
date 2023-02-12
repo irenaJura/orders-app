@@ -1,0 +1,55 @@
+<div class="card">
+  <div class="card-header">
+    {{pageTitle}}
+  </div>
+
+  <div class="card-body">
+    <form novalidate (ngSubmit)="login(loginForm)" #loginForm="ngForm" autocomplete="off">
+      <fieldset>
+
+        <div class="row mt-2">
+          <label class="col-md-2 col-form-label" for="userNameId">Email</label>
+          <div class="col-md-8">
+            <input class="form-control" id="emailId" type="text" placeholder="Email (required)" required ngModel
+              name="userName" #email="ngModel"
+              [ngClass]="{'is-invalid': (email.touched || email.dirty) && !email.valid }" />
+            <span class="invalid-feedback">
+              <span *ngIf="email.errors?.required">
+                Email is required.
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <label class="col-md-2 col-form-label" for="passwordId">Password</label>
+
+          <div class="col-md-8">
+            <input class="form-control" id="passwordId" type="password" placeholder="Password (required)" required
+              ngModel name="password" #password="ngModel"
+              [ngClass]="{'is-invalid': (password.touched || password.dirty) && !password.valid }" />
+            <span class="invalid-feedback">
+              <span *ngIf="password.errors?.required">
+                Password is required.
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-md-4 offset-md-2">
+            <button class="btn btn-primary me-3" type="submit" style="width:80px" [disabled]="!loginForm.valid">
+              Log In
+            </button>
+            <button class="btn btn-outline-secondary" type="button" style="width:80px" [routerLink]="['/login']">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="errorMessage">{{errorMessage}}
+  </div>
+</div>

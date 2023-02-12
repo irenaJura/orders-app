@@ -1,0 +1,69 @@
+<div class="card">
+  <div class="card-header">
+    {{pageTitle}}
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-4">Filter by:</div>
+      <div class="col-md-4">
+        <input type="text" [(ngModel)]="listFilter" />
+      </div>
+      <div class="col-md-2">
+        <select (change)="onFilterChange($event.target)">
+          <option value="all">All</option>
+          <option value="open">Open</option>
+          <option value="closed">Closed</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class='table' *ngIf='paginatedOrders && paginatedOrders.length'>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Order name</th>
+            <th>Customer</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Price</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let order of paginatedOrders'>
+            <td>{{order.id}}</td>
+            <td>
+              <a [routerLink]="['/orders', order.id]">
+                {{ order.name }}
+              </a>
+            </td>
+            <td>{{ order.customer}}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.date }}</td>
+            <td>{{ order.price | currency:'EUR':'symbol':'1.2-2' }}</td>
+            <td>
+              <button class="btn btn-primary" type="button" *ngIf="order.status !== 'closed'"
+                [routerLink]="['/orders', order.id, 'edit']">
+                Edit
+              </button>
+              <button class="btn btn-outline-primary" type="button" *ngIf="order.status === 'closed'"
+                [routerLink]="['/orders', order.id]">
+                View Details
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<app-pagination [totalPages]="totalPages" [totalItems]="totalItems" [searchString]="listFilter" [filter]="filter"
+  (onPageChange)="displayActivePage($event)"></app-pagination>
+
+<div *ngIf="errorMessage" class="alert alert-danger">
+  Error: {{ errorMessage }}
+</div>

@@ -1,0 +1,50 @@
+<div class="card">
+  <div class="card-header">
+    {{pageTitle}}
+  </div>
+
+  <div class="card-body" *ngIf="order">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-md-3">Id:</div>
+          <div class="col-md-6">{{order.id}}</div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">Name:</div>
+          <div class="col-md-6">{{order.name}}</div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">Customer:</div>
+          <div class="col-md-6">{{order.customer}}</div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">Status:</div>
+          <div class="col-md-6">{{order.status}}</div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">Date:</div>
+          <div class="col-md-6">{{order.date}}</div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">Price:</div>
+          <div class="col-md-6">{{order.price|currency:"EUR":"symbol"}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <div class="col-md-4">
+      <button class="btn btn-outline-secondary ms-1" style="width:80px" [routerLink]="['/orders']"
+        queryParamsHandling="preserve">
+        <i class="fa fa-chevron-left"></i> Back
+      </button>
+      <button class="btn btn-outline-primary ms-1" style="width:80px">
+        Save
+      </button>
+    </div>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="errorMessage">{{errorMessage}}
+  </div>
