@@ -50,6 +50,7 @@ export class OrderEditComponent implements OnInit {
         this.isAddMode = true;
         this.buildForm();
         this.initializeEditForm(this.order);
+
       } else {
         this.pageTitle = `Edit Order: ${this.order.name}`;
         this.buildForm();
@@ -63,24 +64,12 @@ export class OrderEditComponent implements OnInit {
       id: new FormControl('', Validators.required),
       name: new FormControl('', Validators.required),
       customer: new FormControl('', Validators.required),
-      cityName: new FormControl(''),
       status: this.isAddMode ?
         new FormControl({value: 'open', disabled: true}, Validators.required) :
         new FormControl('', Validators.required),
       date: new FormControl('', Validators.required),
       price: new FormControl('', Validators.required),
     });
-  }
-
-  get cityName() {
-    return this.orderForm.get('cityName');
-  }
-
-  changeStatus(e: any) {
-    console.log(e.value)
-    this.cityName?.setValue(e.target.value, {
-      onlySelf: true
-    })
   }
 
   initializeEditForm(order: Order): void {
@@ -131,8 +120,8 @@ export class OrderEditComponent implements OnInit {
   }
 
   onSaveComplete(id: number | null): void {
-    this.orderForm.reset();
     this.router.navigate(['/orders', id]);
+    this.orderForm.reset();
   }
 
   onBack(): void {

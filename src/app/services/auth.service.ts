@@ -9,7 +9,6 @@ export class AuthService {
   isValid = true;
 
   get isLoggedIn(): boolean {
-    // console.log(!!this.currentUser)
     return !!this.currentUser;
   }
 
