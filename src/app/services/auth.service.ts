@@ -6,7 +6,6 @@ import { User } from '../modals/user';
 })
 export class AuthService {
   currentUser?: User | undefined;
-  redirectUrl = '';
   isValid = true;
 
   get isLoggedIn(): boolean {

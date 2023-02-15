@@ -15,13 +15,6 @@ export class NavComponent {
     return this.authService.isLoggedIn;
   }
 
-  get email(): string {
-    if (this.authService.currentUser) {
-      return this.authService.currentUser.email;
-    }
-    return '';
-  }
-
   constructor(
     private authService: AuthService, private router: Router) {
   }

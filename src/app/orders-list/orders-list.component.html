@@ -46,7 +46,7 @@
             <td>
               <button class="btn btn-primary" type="button" *ngIf="order.status !== 'closed'"
                 [routerLink]="['/orders', order.id, 'edit']">
-                Edit
+                Edit Order
               </button>
               <button class="btn btn-outline-primary" type="button" *ngIf="order.status === 'closed'"
                 [routerLink]="['/orders', order.id]">

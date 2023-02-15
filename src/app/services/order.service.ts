@@ -89,6 +89,7 @@ getOrder(id: number): Observable<Order> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     // Required for the in memory web API to assign a unique id
     order.id = null;
+    order.status = 'open';
     return this.http.post<Order>(this.ordersUrl, order, { headers })
       .pipe(
         tap(data => {
