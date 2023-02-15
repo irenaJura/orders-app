@@ -33,7 +33,7 @@
         </thead>
         <tbody>
           <tr *ngFor='let order of paginatedOrders'>
-            <td>{{order.id}}</td>
+            <td>{{ order.id }}</td>
             <td>
               <a [routerLink]="['/orders', order.id]">
                 {{ order.name }}

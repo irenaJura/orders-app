@@ -3,48 +3,39 @@
     {{pageTitle}}
   </div>
 
-  <div class="card-body" *ngIf="order">
-    <div class="row">
-      <div class="col-md-8">
-        <div class="row">
-          <div class="col-md-3">Id:</div>
-          <div class="col-md-6">{{order.id}}</div>
-        </div>
-        <div class="row">
-          <div class="col-md-3">Name:</div>
-          <div class="col-md-6">{{order.name}}</div>
-        </div>
-        <div class="row">
-          <div class="col-md-3">Customer:</div>
-          <div class="col-md-6">{{order.customer}}</div>
-        </div>
-        <div class="row">
-          <div class="col-md-3">Status:</div>
-          <div class="col-md-6">{{order.status}}</div>
-        </div>
-        <div class="row">
-          <div class="col-md-3">Date:</div>
-          <div class="col-md-6">{{order.date}}</div>
-        </div>
-        <div class="row">
-          <div class="col-md-3">Price:</div>
-          <div class="col-md-6">{{order.price|currency:"EUR":"symbol"}}</div>
+  <div class="card-body">
+    <form [formGroup]="orderForm" (ngSubmit)="onSubmit(orderForm)">
+      <div *ngFor="let data of formData">
+        <div class="form-group row mb-2">
+          <label class="col-md-2 col-form-label" for={{data.formControlName}}>{{data.label}}</label>
+          <div class="col-md-8">
+            <input class="form-control" id={{data.formControlName}} formControlName={{data.formControlName}}
+              placeholder="{{data.label === 'Date' ? ('dd/mm/yyyy') : ('required')}} "
+              [ngClass]="{'is-invalid': (orderForm.get(data.formControlName)?.touched || orderForm.get(data.formControlName)?.dirty) && orderForm.get(data.formControlName)?.invalid}" />
+            <span class="invalid-feedback">
+              <span *ngIf="orderForm.get(data.formControlName)?.errors?.required">
+                Please enter your {{data.label}}.
+              </span>
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="card-footer">
-    <div class="col-md-4">
-      <button class="btn btn-outline-secondary ms-1" style="width:80px" [routerLink]="['/orders']"
-        queryParamsHandling="preserve">
-        <i class="fa fa-chevron-left"></i> Back
-      </button>
-      <button class="btn btn-outline-primary ms-1" style="width:80px">
-        Save
-      </button>
-    </div>
-  </div>
+      <div class="card-footer">
+        <div class="col-md-4">
+          <button class="btn btn-outline-secondary ms-1" style="width:80px" [routerLink]="['/orders']"
+            queryParamsHandling="preserve">
+            <i class="fa fa-chevron-left"></i> Back
+          </button>
+          <button class="btn btn-outline-primary ms-1" style="width:80px">
+            Save
+          </button>
+          <button class="btn btn-outline-danger ms-1" type="button" style="width:80px" *ngIf="!isAddMode"
+            (click)="deleteOrder()">
+            Delete
+          </button>
+        </div>
+      </div>
 
-  <div class="alert alert-danger" *ngIf="errorMessage">{{errorMessage}}
-  </div>
+      <div class="alert alert-danger" *ngIf="errorMessage">{{errorMessage}}
+      </div>

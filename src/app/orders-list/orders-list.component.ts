@@ -37,7 +37,7 @@ export class OrdersListComponent implements OnInit {
   }
 
   getPaginatedOrders(query?: GetOrdersQuery) {
-    this.sub = this.orderService.getOrders(query).subscribe({
+    this.sub = this.orderService.getPaginatedOrders(query).subscribe({
       next: orders =>  {
         this.paginatedOrders = orders.data;
         this.totalItems = orders.totalItems;

@@ -10,19 +10,20 @@ import { Order } from '../modals/order';
   providedIn: 'root'
 })
 export class OrderService {
-  private ordersUrl = 'api/mock-orders.json';
+  private ordersUrl = 'api/orders';
+  private orders: Order[] = [];
 
   constructor(private http: HttpClient) { }
 
   getAllOrders(): Observable<Order[]> {
     return this.http.get<Order[]>(this.ordersUrl)
       .pipe(
-        tap(data => console.log(JSON.stringify(data))),
+        tap(data => this.orders = data),
         catchError(this.handleError)
       );
   }
 
-  getOrders(query?: GetOrdersQuery): Observable<OrdersResponse<Order>> {
+  getPaginatedOrders(query?: GetOrdersQuery): Observable<OrdersResponse<Order>> {
     return this.http.get<Order[]>(this.ordersUrl).pipe(
       map((data) => {
         const orders = data;
@@ -37,14 +38,14 @@ export class OrderService {
           o.name
               .toLowerCase()
               .includes(searchString) ||
-          o.id.toString().includes(searchString))
+          o.id?.toString().includes(searchString))
           .filter((o: Order) => o.status === filter)
         } else if (searchString) {
           foundOrders = orders.filter((o: Order) =>
                 o.name
                     .toLowerCase()
                     .includes(searchString) ||
-                o.id.toString().includes(searchString))
+                o.id?.toString().includes(searchString))
         } else if (filter && filter !== "all") {
           foundOrders = orders.filter((o: Order) => o.status === filter)
         } else {
@@ -72,21 +73,29 @@ export class OrderService {
     );
 }
 
-  getOrder(id: number): Observable<Order | undefined> {
-    return this.getAllOrders()
-      .pipe(
-        map((data) => data),
-        map((orders: Order[]) => orders.find(p => p.id === id))
-      )
+getOrder(id: number): Observable<Order> {
+  if (id === 0) {
+    return of(this.initializeOrder());
   }
+  const url = `${this.ordersUrl}/${id}`;
+  return this.http.get<Order>(url)
+    .pipe(
+      tap(data => console.log('getOrder: ' + JSON.stringify(data))),
+      catchError(this.handleError)
+    );
+}
 
   createOrder(order: Order): Observable<Order> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     // Required for the in memory web API to assign a unique id
-    order.id = 0;
+    order.id = null;
     return this.http.post<Order>(this.ordersUrl, order, { headers })
       .pipe(
-        tap(data => console.log('createProduct: ' + JSON.stringify(data))),
+        tap(data => {
+          this.orders.push(order);
+          console.log('createProduct: ' + JSON.stringify(data))
+        }),
+        map(data => data),
         catchError(this.handleError)
       );
   }
@@ -106,7 +115,7 @@ export class OrderService {
     const url = `${this.ordersUrl}/${order.id}`;
     return this.http.put<Order>(url, order, { headers })
       .pipe(
-        tap(() => console.log('updateProduct: ' + order.id)),
+        tap(() => console.log('updateOrder: ' + order.id)),
         // Return the order on an update
         map(() => order),
         catchError(this.handleError)
@@ -122,6 +131,18 @@ export class OrderService {
       }
       console.log(errorMessage);
       return throwError(errorMessage);
+  }
+
+  private initializeOrder(): Order {
+    // Return an initialized object
+    return {
+      id: 0,
+      name: '',
+      customer: '',
+      status: 'open',
+      date: '',
+      price: 0
+    };
   }
 }
 

@@ -11,11 +11,14 @@
           <label class="col-md-2 col-form-label" for="userNameId">Email</label>
           <div class="col-md-8">
             <input class="form-control" id="emailId" type="text" placeholder="Email (required)" required ngModel
-              name="userName" #email="ngModel"
+              name="userName" #email="ngModel" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
               [ngClass]="{'is-invalid': (email.touched || email.dirty) && !email.valid }" />
             <span class="invalid-feedback">
               <span *ngIf="email.errors?.required">
                 Email is required.
+              </span>
+              <span *ngIf="email.errors?.pattern">
+                Email is invalid.
               </span>
             </span>
           </div>
@@ -26,11 +29,14 @@
 
           <div class="col-md-8">
             <input class="form-control" id="passwordId" type="password" placeholder="Password (required)" required
-              ngModel name="password" #password="ngModel"
+              ngModel name="password" #password="ngModel" pattern="^(?=.{6,}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\W).*$"
               [ngClass]="{'is-invalid': (password.touched || password.dirty) && !password.valid }" />
             <span class="invalid-feedback">
               <span *ngIf="password.errors?.required">
                 Password is required.
+              </span>
+              <span *ngIf="password.errors?.pattern">
+                Password must have min. 6 characters, 1 uppercase, 1 lowercase, 1 special character.
               </span>
             </span>
           </div>
